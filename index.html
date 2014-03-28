@@ -32,35 +32,130 @@
         <!-- <script src="js/vendor/ustream-embedapi.js"></script> -->
 
         <div>
-            <iframe id="UstreamIframe" width="96" height="65" src="http://www.ustream.tv/embed/1524" scrolling="no" frameborder="0" style="margin-top: -96px;border : 0px none transparent;"></iframe>
+            <iframe id="UstreamIframe" width="150" height="200"
+                    src="http://www.ustream.tv/embed/1524"
+                    scrolling="no"
+                    frameborder="0"
+                    style="border: 0 transparent none;"
+                    ></iframe>
         </div>
 
-        <button onclick="$ustreamAPI.callMethod('play')">[ > ] Play</button>
-        <button onclick="$ustreamAPI.callMethod('pause')">[ || ] Pause</button>
-        <button onclick="$ustreamAPI.callMethod('volume', 0)">[ ? ] Mute</button>
-        <button onclick="$ustreamAPI.callMethod('volume', 100)">[ )) ] Unmute</button>
+        <button class = "btn control-play" >[ > ] Play</button>
+        <button class = "btn control-pause">[ || ] Pause</button>
+        <button class = "btn control-mute">[ ? ] Mute</button>
+        <button class = "btn control-unmute">[ )) ] Unmute</button>
 
         <script>
-            $videoW = 1920;
-            $videoH = 1080;
 
-            window.restoreSize = function ()
-            {
+            $(document).ready(function () {
 
-                $extraH = 200;
-                $barH = 32;
-                $videoContainer.style.height = ($videoH+$extraH)+"px";
-                $videoContainer.style.width = $videoW+"px";
-                $videoContainer.style.marginTop = "-"+($extraH/2-$barH/2)+"px";
-                $videoContainer.parentNode.style.width = $videoW;
-                $videoContainer.parentNode.style.height = $videoH;
+                var ustreamAPI = UstreamEmbed('UstreamIframe');
 
-            }
+                /*
+                 set up controls
+                 */
+                $(document.body).on("click", '.btn, .dropdown-menu a', function (e) {
+                    var target = $(e.currentTarget),
+                            control = target[0].className.match(/control-([a-zA-Z0-9\-]*)/);
 
-            $videoContainer = document.getElementById('UstreamIframe');
-            $videoContainer.parentNode.style.overflow = 'hidden';
-            $ustreamAPI = UstreamEmbed('UstreamIframe');
-            $ustreamAPI.addListener('playing', restoreSize);
+                    if (control && control[1]) {
+
+                        switch (control[1]) {
+
+                            case "play":
+                                ustreamAPI.callMethod('play');
+                                break;
+                            case "pause":
+                                ustreamAPI.callMethod('pause');
+                                break;
+                            case "mute":
+                                ustreamAPI.callMethod('volume', 0);
+                                break;
+                            case "unmute":
+                                ustreamAPI.callMethod('volume', 100);
+                                break;
+                            // case "seek":
+                            //     ustreamAPI.callMethod('seek', $("#SeekTo").val());
+                            //     break;
+                            // case "volume":
+                            //     ustreamAPI.callMethod('volume', $("#SetVolume").val());
+                            //     break;
+                            // case "duration":
+                            //     vustreamAPIgetProperty('duration', function (data) {
+                            //         $('#Duration').val(data);
+                            //     });
+                            //     break;
+                            // case "progress":
+                            //     vustreamAPIgetProperty('progress', function (data) {
+                            //         $('#Progress').val(data);
+                            //     });
+                            //     break;
+                            // case "viewers":
+                            //     vustreamAPIgetProperty('viewers', function (data) {
+                            //         $('#Viewers').val(data);
+                            //     });
+                            //     break;
+                            // case "content":
+                            //     vustreamAPIgetProperty('content', function (data) {
+                            //         $('#Content').val(data.join(','));
+                            //     });
+                            //     break;
+                            // case "load-video":
+                            //     clearFields();
+                            //     ustreamAPI.callMethod('load', 'video', $("#LoadContent").val());
+                            //     break;
+                            // case "load-channel":
+                            //     clearFields();
+                            //     ustreamAPI.callMethod('load', 'channel', $("#LoadContent").val());
+                            //     break;
+                            // case "quality":
+                            //     ustreamAPI.callMethod('quality', target.data('quality'));
+                            //     break;
+
+                        }
+
+                    }
+
+                    e.preventDefault();
+                });
+
+                var videoW = 640;
+                var videoH = 480;
+
+                var restoreSize = function() {
+                    var extraH = 40;
+                    var barH = 32;
+                    videoContainer.style.height = (videoH+extraH)+"px";
+                    videoContainer.style.width = videoW+"px";
+                    videoContainer.style.marginTop = "-"+($extraH/2-barH/2)+"px";
+                    videoContainer.parentNode.style.width = $videoW;
+                    videoContainer.parentNode.style.height = $videoH;
+                }
+
+                var videoContainer = $("#UstreamIframe");
+                videoContainer.parent().css(
+                    'overflow', 'hidden');
+                // videoContainer.parentNode.style.overflow = 'hidden';
+                // $('#prevx').parent().css('display','none')
+
+                ustreamAPI.addListener('playing', restoreSize);
+            });
+
+
+
+            // window.restoreSize = function ()
+            // {
+
+            //     $extraH = 40;
+            //     $barH = 32;
+            //     videoContainer.style.height = (videoH+$extraH)+"px";
+            //     videoContainer.style.width = videoW+"px";
+            //     videoContainer.style.marginTop = "-"+($extraH/2-$barH/2)+"px";
+            //     videoContainer.parentNode.style.width = $videoW;
+            //     videoContainer.parentNode.style.height = $videoH;
+
+            // }
+
         </script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
