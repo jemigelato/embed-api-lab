@@ -125,36 +125,20 @@
                 var restoreSize = function() {
                     var extraH = 40;
                     var barH = 32;
-                    videoContainer.style.height = (videoH+extraH)+"px";
-                    videoContainer.style.width = videoW+"px";
-                    videoContainer.style.marginTop = "-"+($extraH/2-barH/2)+"px";
-                    videoContainer.parentNode.style.width = $videoW;
-                    videoContainer.parentNode.style.height = $videoH;
+                    videoContainer.height(videoH + extraH);
+                    videoContainer.width(videoW);
+                    videoContainer.css('margin-top', (extraH/2-barH/2) + 'px');
+                    videoContainer.parent().width(videoW);
+                    videoContainer.parent().height(videoH);
                 }
 
                 var videoContainer = $("#UstreamIframe");
                 videoContainer.parent().css(
                     'overflow', 'hidden');
-                // videoContainer.parentNode.style.overflow = 'hidden';
-                // $('#prevx').parent().css('display','none')
 
                 ustreamAPI.addListener('playing', restoreSize);
             });
 
-
-
-            // window.restoreSize = function ()
-            // {
-
-            //     $extraH = 40;
-            //     $barH = 32;
-            //     videoContainer.style.height = (videoH+$extraH)+"px";
-            //     videoContainer.style.width = videoW+"px";
-            //     videoContainer.style.marginTop = "-"+($extraH/2-$barH/2)+"px";
-            //     videoContainer.parentNode.style.width = $videoW;
-            //     videoContainer.parentNode.style.height = $videoH;
-
-            // }
 
         </script>
 
