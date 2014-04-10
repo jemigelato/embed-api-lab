@@ -13,9 +13,20 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <link rel="stylesheet" href="css/normalize.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet">
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="http://static.ustream.tv/js/libs/ustream-embedapi.js"></script>
+        <style type="text/css">
+            body {
+                padding: 20px;
+            }
+        </style>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -23,27 +34,42 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <p>Hello Embed API Demo!</p>
+        <h1>Hello, Embed API Demo!</h1>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
         <!-- <script src="js/vendor/ustream-embedapi.js"></script> -->
+        <div style="width: 550px; float: left; margin-bottom: 10px;">
+            <div>
+                <iframe id="UstreamIframe" width="400" height="350"
+                        src="http://www.ustream.tv/embed/1524"
+                        scrolling="no"
+                        frameborder="0"
+                        style="border: 0 transparent none;"
+                        ></iframe>
+            </div>
+            <button class = "btn control-play" >[ > ] Play</button>
+            <button class = "btn control-pause">[ || ] Pause</button>
+            <button class = "btn control-mute">[ ? ] Mute</button>
+            <button class = "btn control-unmute">[ )) ] Unmute</button>
 
-        <div>
-            <iframe id="UstreamIframe" width="150" height="200"
-                    src="http://www.ustream.tv/embed/1524"
-                    scrolling="no"
-                    frameborder="0"
-                    style="border: 0 transparent none;"
-                    ></iframe>
+            <form class="form-inline" action="#">
+                <fieldset style="margin: 20px 0; float: left; width: 300px;">
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn control-load-video btn-info" type="button"> <i class="icon-user"></i>
+                                Load video
+                            </button>
+                        </span>
+                        <input class="form-control span2" value="24364591" id="LoadContent" type="number" placeholder="video ID">
+                    </div>
+                </fieldset>
+            </form>
         </div>
+        <span>
+            <textarea class="form-control" rows="15" id="messages" style="width: 500px;"></textarea>
+        </span>
 
-        <button class = "btn control-play" >[ > ] Play</button>
-        <button class = "btn control-pause">[ || ] Pause</button>
-        <button class = "btn control-mute">[ ? ] Mute</button>
-        <button class = "btn control-unmute">[ )) ] Unmute</button>
 
         <script>
 
@@ -100,10 +126,10 @@
                             //         $('#Content').val(data.join(','));
                             //     });
                             //     break;
-                            // case "load-video":
-                            //     clearFields();
-                            //     ustreamAPI.callMethod('load', 'video', $("#LoadContent").val());
-                            //     break;
+                            case "load-video":
+                                // clearFields();
+                                ustreamAPI.callMethod('load', 'video', $("#LoadContent").val());
+                                break;
                             // case "load-channel":
                             //     clearFields();
                             //     ustreamAPI.callMethod('load', 'channel', $("#LoadContent").val());
@@ -120,7 +146,7 @@
                 });
 
                 var videoW = 640;
-                var videoH = 480;
+                var videoH = 520;
 
                 var restoreSize = function() {
                     var extraH = 40;
@@ -128,15 +154,33 @@
                     videoContainer.height(videoH + extraH);
                     videoContainer.width(videoW);
                     videoContainer.css('margin-top', (extraH/2-barH/2) + 'px');
-                    videoContainer.parent().width(videoW);
-                    videoContainer.parent().height(videoH);
+                    // videoContainer.parent().width(videoW);
+                    // videoContainer.parent().height(videoH);
+                }
+
+                var playingCallback = function(event, data) {
+                    var d = new Date();
+                    var time = d.toLocaleTimeString();
+                    $('#messages').append(time + ' playing : ' + data + '\n' );
+                    $('#messages').scrollTop($('#messages')[0].scrollHeight);
+                    if (!data) {
+                        console.log("stopped playing");
+                        localStorage.setItem("vid", $("#LoadContent").val() );
+                        console.log("storing vid: " + $("#LoadContent").val());
+                        ustreamAPI.getProperty('progress', function (data) {
+                                localStorage.setItem("stopMark", data );
+                                console.log("storing stopMark: " + data);
+                            });
+
+
+                    }
                 }
 
                 var videoContainer = $("#UstreamIframe");
                 videoContainer.parent().css(
                     'overflow', 'hidden');
 
-                ustreamAPI.addListener('playing', restoreSize);
+                ustreamAPI.addListener('playing', playingCallback);
             });
 
 
