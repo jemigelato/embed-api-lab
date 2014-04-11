@@ -19,6 +19,7 @@
         <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
         <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/bootstrap-hero.min.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="http://static.ustream.tv/js/libs/ustream-embedapi.js"></script>
@@ -47,6 +48,8 @@
                         frameborder="0"
                         style="border: 0 transparent none;"
                         ></iframe>
+
+
  <!--                <iframe id="UstreamIframe" width="400" height="350"
                         src="http://www.ustream.tv/flash/video/24364591"
                         scrolling="no"
@@ -54,25 +57,26 @@
                         style="border: 0 transparent none;"
                         ></iframe> -->
             </div>
-            <button class = "btn control-play" >[ > ] Play</button>
-            <button class = "btn control-pause">[ || ] Pause</button>
-            <button class = "btn control-mute">[ ? ] Mute</button>
-            <button class = "btn control-unmute">[ )) ] Unmute</button>
+            <button class = "btn btn-primary control-play" >[ > ] Play</button>
+            <button class = "btn btn-primary control-pause">[ || ] Pause</button>
+            <button class = "btn btn-primary control-mute">[ ? ] Mute</button>
+            <button class = "btn btn-primary control-unmute">[ )) ] Unmute</button>
 
             <form class="form-inline" action="#">
                 <fieldset style="margin: 20px 0; float: left; width: 300px;">
                     <div class="input-group">
+                        <input class="form-control span2" value="24364591" id="LoadContent" type="number" placeholder="video ID">
                         <span class="input-group-btn">
-                            <button class="btn control-load-video btn-info" type="button"> <i class="icon-user"></i>
+                            <button class="btn btn-primary control-load-video" type="button"> <i class="icon-download"></i>
                                 Load video
                             </button>
                         </span>
-                        <input class="form-control span2" value="24364591" id="LoadContent" type="number" placeholder="video ID">
                     </div>
                 </fieldset>
             </form>
         </div>
         <span>
+            <h3>"playing" Event Log</h3>
             <textarea class="form-control" rows="15" id="messages" style="width: 500px;"></textarea>
         </span>
 
